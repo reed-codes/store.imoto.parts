@@ -1,0 +1,31 @@
+.dnd-list-wrapper1 {
+    border: 1px #c7c8c9 solid;
+    background:#000;
+    display: flex;
+    overflow: auto;
+    padding: 1.4rem 1.5rem;
+    background-color: "red";
+    background: "red";
+  }
+  
+  .dnd-item1 {
+    position: relative;
+    display: block;
+    height: 50px;
+    width: 95px !important;
+    display: flex;
+    border: 1px transparent dashed;
+    margin-right: 10px;
+    cursor: grab;
+    background-size: cover !important;
+    background-position: center !important;
+    background-color: #f6f7f9 !important;
+  }
+  
+  .hovered-dnd-item1 {
+    transform: scale(1.01);
+    border: 1px dashed limegreen !important;
+    cursor: grabbing;
+  }
+  
+  

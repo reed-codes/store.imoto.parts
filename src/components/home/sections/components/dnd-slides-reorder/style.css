@@ -1,0 +1,6 @@
+.hovered-dnd-item {
+  transform: scale(1.01);
+  border: 1px dashed limegreen !important;
+  cursor: grabbing;
+}
+

@@ -1,0 +1,10 @@
+.hovered-home-screen-slider-dnd-item{
+  transform: scale(1.01);
+  border: 1px dashed limegreen !important;
+  cursor: grabbing;
+}
+
+.home-screen-slider-dnd-item{
+  background-size: cover !important;
+  cursor: grab !important;
+}

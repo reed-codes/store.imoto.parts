@@ -1,0 +1,52 @@
+// Header
+
+// Menu
+.main-nav {
+	margin-left: 3vw;
+}
+
+// Header Icons
+.header-icon {
+	margin-left: -1px;
+	margin-right: 23px;
+	font-size: 26px;
+
+	.icon-user-2 {
+		font-size: 24px;
+	}
+}
+
+// Cart Dropdown
+.cart-dropdown .dropdown-toggle i {
+	font-size: 26px;
+	transform: translateY(-1px);
+}
+
+.cart-count {
+	width: 15px;
+	font-size: 0.963rem;
+	line-height: 15px;
+}
+
+// Search
+.header-search {
+	margin-top: 2px;
+	margin-right: 23px;
+}
+
+@include only_for_ie() {
+	.header-search-wrapper {
+		margin-top: 9px;
+	}
+}
+
+@include only_for_edge() {
+	.header-search-wrapper {
+		margin-top: 9px;
+	}
+}
+
+// Menu Toggler
+.mobile-menu-togger {
+	padding: 1.2rem .5rem .8rem;
+}

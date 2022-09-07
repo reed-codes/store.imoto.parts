@@ -1,0 +1,14 @@
+.hovered-home-screen-slider-dnd-item {
+  transform: scale(1.01);
+  border: 1px dashed limegreen !important;
+  cursor: grabbing;
+}
+
+.footer-social-media-dnd-item {
+  background-size: cover !important;
+  cursor: grab !important;
+}
+
+.footer-social-media-dnd-item svg {
+  fill: #222529 !important;
+}

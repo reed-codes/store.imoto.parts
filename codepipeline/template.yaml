@@ -1,0 +1,305 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  CommunityBasicStackName:
+    Type: String
+    Description: >
+      The Community BasicStack Name. Check in CloudFormation eg. "imoto" or "jackhammerbasic"
+    Default: imotoinfrastructure
+  CommunityName:
+    Type: String
+    Description: Unique community name for resources
+    Default: imoto
+  DomainName:
+    Type: String
+    Description: Unique domain name for resources eg. imoto.parts
+    Default: imoto.parts
+  Alias:
+    Type: String
+    Description: Unique alias name for resources eg. admin
+    Default: store
+  CodeCommitRepo:
+    Type: String
+    Description: CodeCommit repository name, only specify if you chose CodeCommit in SourceCodeProvider
+    Default: 'communitystore'
+  CodeCommitBranch:
+    Type: String
+    Description: CodeCommit repository branch name, only specify if you chose CodeCommit in SourceCodeProvider.
+    Default: 'master'
+  HostedZoneId:
+    Type: String
+    Description: The hosted zone id for the domain.
+    Default: 'Z00791138PXQE100K694'
+  AcmCertificateArn:
+    Type: String
+    Description: The hosted zone id for the domain.
+    Default: arn:aws:acm:us-east-1:165145623882:certificate/c8d257f9-6cf5-4697-95a8-f6f931b9c531
+    
+
+Resources:
+  DeployBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Sub ${Alias}.${DomainName}
+      # Technically we don't need the S3 bucket configured
+      # as a website, but I included it for the sake of completion.
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+      AccessControl: "PublicRead"
+
+  DeployBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Sub ${Alias}.${DomainName}
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 's3:GetObject'
+            Effect: Allow
+            Resource:
+              'Fn::Join':
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Sub ${Alias}.${DomainName}
+                  - /*
+            Principal: '*'
+ 
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - # Use the DeployBucket as the CDN origin
+            DomainName: !GetAtt DeployBucket.DomainName
+            Id: !Ref DeployBucket
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+        Aliases:
+          - !Sub ${Alias}.${DomainName}
+        DefaultRootObject: index.html
+        Enabled: true
+        # Configure the caching behavior for our CDN
+        DefaultCacheBehavior:
+          MinTTL: 86400 # 1 day
+          MaxTTL: 31536000 # 1 year
+          ForwardedValues:
+            QueryString: true
+          TargetOriginId: !Ref DeployBucket
+          ViewerProtocolPolicy: "redirect-to-https" # we want to force HTTPS
+        ViewerCertificate:
+          AcmCertificateArn: !Ref AcmCertificateArn
+          MinimumProtocolVersion: TLSv1.1_2016
+          SslSupportMethod: sni-only
+        CustomErrorResponses:
+          -
+            ErrorCachingMinTTL: 60
+            ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: "/index.html"
+
+  Route53RecordSetGroups:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Sub '${DomainName}.'
+      RecordSets:
+      - Name: !Sub ${Alias}.${DomainName}
+        Type: A
+        AliasTarget:
+          DNSName: !GetAtt Distribution.DomainName
+          EvaluateTargetHealth: false
+          HostedZoneId: Z2FDTNDATAQYW2
+
+  CodeBuild:
+    Type: 'AWS::CodeBuild::Project'
+    Properties:
+      Name: !Sub ${AWS::StackName}-CodeBuild
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      Artifacts:
+        # The downloaded source code for the build will come from CodePipeline
+        Type: CODEPIPELINE
+        Name: MyProject
+      # Source: 
+      #   Type: CODEPIPELINE
+      Environment:
+        # Linux container with node installed
+        ComputeType: BUILD_GENERAL1_MEDIUM
+        Type: LINUX_CONTAINER
+        Image: "aws/codebuild/nodejs:8.11.0"
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: !Sub |
+          version: 0.1
+          phases:
+            pre_build:
+              commands:
+                - echo Installing source NPM dependencies...
+                - npm install
+                - rm -r node_modules/terser
+                - npm install terser@3.14.1 --save-dev
+            build:
+              commands:
+                - ls
+                - echo Build started on `date`
+                - npm run build
+            post_build:
+              commands:
+                - echo post_build started on `date`
+                # copy the contents of /build to S3
+                - aws s3 cp --recursive --acl public-read ./build s3://${DeployBucket}/ 
+                ## set the cache-control headers for service-worker.js to prevent
+                ## browser caching
+                #- >
+                #  aws s3 cp --acl public-read 
+                #  --cache-control="max-age=0, no-cache, no-store, must-revalidate" 
+                #  ./build/service-worker.js s3://${DeployBucket}/
+                ## set the cache-control headers for index.html to prevent
+                ## browser caching
+                #- >
+                #  aws s3 cp --acl public-read 
+                #  --cache-control="max-age=0, no-cache, no-store, must-revalidate" 
+                #  ./build/index.html s3://${DeployBucket}/
+                # invalidate the CloudFront cache for index.html and service-worker.js
+                # to force CloudFront to update its edge locations with the new versions
+                - >
+                  aws cloudfront create-invalidation --distribution-id ${Distribution} 
+                  --paths /index.html /service-worker.js 
+          artifacts:
+            files:
+              - '**/*'
+            base-directory: build
+  # IAM role that allows CodeBuild to interact with S3, CloudWatch, and CloudFront
+
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - 
+            Effect: Allow
+            Principal:
+              Service:
+                - "codebuild.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: /service-role/
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement: 
+              - 
+                Effect: Allow
+                Action:
+                  - "s3:GetObject"
+                  - "s3:GetObjectVersion"
+                  - "s3:GetBucketVersioning"
+                  - "s3:PutObject"
+                Resource: 
+                  - !GetAtt PipelineBucket.Arn
+                  - !Join ['', [!GetAtt PipelineBucket.Arn, "/*"]]
+              - 
+                Effect: Allow
+                Action:
+                  - "s3:GetObject"
+                  - "s3:GetObjectVersion"
+                  - "s3:GetBucketVersioning"
+                  - "s3:PutObject"
+                  - "s3:PutObjectAcl"
+                Resource: 
+                  - !GetAtt DeployBucket.Arn
+                  - !Join ['', [!GetAtt DeployBucket.Arn, "/*"]]
+              -
+                Effect: Allow
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "cloudfront:CreateInvalidation"
+                Resource:
+                  - "*"
+
+  CodePipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      RoleArn: !GetAtt CodePipeLineRole.Arn
+      ArtifactStore:
+        Location: !Ref PipelineBucket
+        Type: S3
+      Stages:
+        - Name: Source
+          Actions: 
+            - Name: CodeCommitSource
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Provider: CodeCommit
+                Version: "1"
+              Configuration:
+                RepositoryName: !Ref CodeCommitRepo
+                BranchName: !Ref CodeCommitBranch
+              OutputArtifacts:
+                - Name: MyApp
+        - Name: Build
+          Actions: 
+            - Name: BuildAction
+              ActionTypeId: 
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              InputArtifacts: 
+                - Name: MyApp
+              OutputArtifacts: 
+                - Name: MyAppBuild
+              Configuration:
+                ProjectName: !Ref CodeBuild
+
+  CodePipeLineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "codepipeline.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: Allow
+                Action:
+                  - "s3:GetObject"
+                  - "s3:GetObjectVersion"
+                  - "s3:GetBucketVersioning"
+                  - "s3:PutObject"
+                Resource: 
+                  - !GetAtt PipelineBucket.Arn
+                  - !Join ['', [!GetAtt PipelineBucket.Arn, "/*"]]
+              - Effect: Allow  
+                Action:
+                  - "codebuild:BatchGetBuilds"
+                  - "codebuild:StartBuild"
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - codecommit:ListBranches
+                  - codecommit:GetBranch
+                  - codecommit:GetCommit
+                  - codecommit:GetUploadArchiveStatus
+                  - codecommit:GitPull
+                  - codecommit:UploadArchive
+                  - codecommit:CancelUploadArchive
+                Resource:
+                  - !Sub arn:${AWS::Partition}:codecommit:${AWS::Region}:${AWS::AccountId}:${CodeCommitRepo}
+
+  # Temp bucket for storing build artifacts
+  PipelineBucket: 
+    Type: 'AWS::S3::Bucket'
+    Properties: {}

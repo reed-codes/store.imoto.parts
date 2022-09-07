@@ -1,0 +1,146 @@
+// Header
+
+// # Contents
+// 1. Header Base
+.header-middle {
+	border-bottom: 1px solid #e7e7e7;
+}
+
+.header-align-center {
+	.header-left,
+	.header-right {
+		flex: 1;
+		-ms-flex: 1;
+	}
+
+	.header-right{ 
+		justify-content: flex-end;
+		-ms-flex-pack: end;
+	}
+}
+
+.header-top {
+	height: 4.5rem;
+	padding-top: .8rem;
+	padding-bottom: .7rem;
+	border-bottom: 1px solid #eee;
+	color: #fff;
+	background-color: $primary-color-dark;
+	font-size: 1.1rem;
+	font-weight: 400;
+	letter-spacing: .025em;
+	line-height: 1.5;
+
+	a {
+		color: inherit;
+	}
+}
+
+// 2. Header Elements
+
+// 2.1) Telephone
+
+.telephone {
+	color: inherit;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+// 2.4) Header Dropdown - Switcher
+.header-dropdown.switcher {
+	padding: 1.2rem 0;
+
+	ul:before {
+		content: normal;
+	}
+
+	&:first-child {
+		margin-left: 0;
+	}
+
+	> a {
+		padding: 1.2rem 2.4rem;
+		color: $primary-color-dark;
+		background-color: #f4f4f4;
+		border-radius: 5rem;
+	}
+
+	.header-menu {
+		font-size: 1.2rem;
+	}
+}
+
+// 2.6) Wishlist Icon & Cart Dropdown
+.header-icon,
+.cart-count {
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+.header-icon,
+.dropdown-toggle {
+	i {
+		font-size: 2rem;
+
+		&:before {
+			vertical-align: bottom;
+		}
+	}
+}
+
+.header-icon i {
+	display: inline-block;
+	transform: translate(1px, -2px);
+}
+
+.cart-dropdown .dropdown-menu{
+	&:before {
+		right: 12px;
+	}
+
+	&:after {
+		content: '';
+		position: absolute;
+		top: -14px;
+		right: 11px;
+		border: 11px solid;
+		border-color: transparent transparent #f0f0f0;
+		z-index: -1;
+	}
+}
+
+.dropdown-cart-header a {
+	color: #000;
+}
+
+// Responsive
+@include mq(lg) {
+	.header-bottom .header-right {
+		padding-bottom: .8rem;
+	}
+}
+
+@include mq(lg, max) {
+	.header-mobile-merge {
+		display: flex;
+		display: -ms-flexbox;
+		align-items: center;
+		-ms-flex-align: center;
+
+		.header-middle {
+			flex: 1;
+			-ms-flex: 1;
+			border: 0;
+
+			.container {
+				padding-right: 0;
+			}
+		}
+	}
+	.header-icon,
+	.dropdown-toggle {
+		i {
+			font-size: 2.8rem;
+		}
+	}
+}

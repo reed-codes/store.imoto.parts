@@ -1,0 +1,6 @@
+.hovered-product-widget-dnd-item {
+  transform: scale(1.01);
+  border: 1px double #cde5fe !important;
+  cursor: grabbing;
+}
+

@@ -1,0 +1,152 @@
+
+// 1. Footer Top
+.footer {
+	line-height: 1.4;
+}
+
+.footer-top {
+	.container {
+		&:after {
+			content: '';
+			display: block;
+			flex: 0 0 100%;
+			border-top: 1px solid #e7e7e7;
+			margin-top: 4rem;
+		}
+
+		&:not(.top-border),
+		&.top-border:before {
+			padding-top: 4rem;
+		}
+	}
+
+	form {
+		margin: 0;
+	}
+
+	button {
+		padding: .7em 1.244em;
+
+		&:hover {
+			opacity: .8;
+		}
+	}
+
+	.form-control {
+		width: 100%;
+		height: auto;
+		margin: 0;
+		border: none;
+		padding: 1.25em 1em;
+		color: $body-text;
+		background-color: #f4f4f4;
+		font-family: $font-family;
+		font-size: 1.2rem;
+
+		&::placeholder {
+			color: #999;
+		}
+
+		&:focus,
+		&:active {
+			background-color: #f4f4f4;
+		}
+	}
+}
+
+.widget-newsletter-info {
+	margin-right: 4.8rem;
+}
+
+.widget-newsletter-title {
+	letter-spacing: .075em;
+	font-size: 1.6rem;
+}
+
+p.widget-newsletter-content {
+	font-family: $font-family;
+	line-height: 20px;
+}
+
+// 2. Footer Middle
+
+.footer-middle {
+	.logo {
+		margin-bottom: 4rem;
+		margin-right: 0;
+	}
+
+	.links {
+		line-height: 2.4rem;
+	}
+}
+
+footer {
+	letter-spacing: .005em;
+
+	.widget-title {
+		line-height: 1.4;
+		margin: 0 0 1.5rem;
+	}
+}
+
+.widget-account {
+	padding: 0 7rem;
+}
+
+footer .contact-widget {
+	margin: 0 0 1rem;
+
+	.widget-title {
+		font-weight: 400;
+		font-size: 1.3rem;
+		font-family: $font-family;
+		letter-spacing: .005em;
+		color: $primary-color;
+		margin-bottom: 0;
+	}
+
+	a {
+		display: block;
+		margin-top: 2px;
+	}
+}
+
+// 3. Footer Bottom
+.footer-bottom {
+	.container {
+		&:not(.top-border),
+		&.top-border:before {
+			padding-top: 2.4rem;
+		}
+	}
+}
+
+// Responsive
+
+@include mq(lg, max) {
+	footer .widget-newsletter {
+		margin-bottom: 2rem;
+	}
+
+	footer .widget {
+		margin-bottom: 3rem;
+	}
+}
+
+@include mq(md, max) {
+	.widget-newsletter-info {
+		margin-bottom: 1.5rem;
+	}
+
+	.widget-newsletter .form-control {
+		max-width: 70%;
+	}
+
+	.footer-top {
+		.form-control,
+		button {
+			height: 40px;
+		}
+	}
+}

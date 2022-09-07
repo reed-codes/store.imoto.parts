@@ -1,0 +1,41 @@
+.super-treeview
+  > div
+  > .super-treeview-node
+  > .super-treeview-node-content
+  > .super-treeview-triangle-btn {
+  float: none !important;
+  margin-right: 5px !important;
+  cursor: pointer !important;
+  height: 100% !important;
+  width: 100% !important;
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: transparent !important;
+  border: none !important;
+}
+
+.super-treeview > div > .super-treeview-node > .super-treeview-node-content {
+  position: relative;
+}
+
+.super-treeview-text {
+  color: #777;
+}
+
+.super-treeview
+  > div
+  > .super-treeview-node
+  > .super-treeview-children-container {
+  border-left: 1px solid #08c !important;
+}
+
+.super-treeview > div > .super-treeview-node > .super-treeview-node-content:hover {
+  background:rgba(0, 136, 204, 0.055) !important
+}
+
+.super-treeview > div > .super-treeview-node > .super-treeview-node-content:active {
+  background:rgba(0, 136, 204, 0.239) !important
+}

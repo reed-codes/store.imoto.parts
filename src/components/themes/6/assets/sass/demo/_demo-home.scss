@@ -1,0 +1,474 @@
+// Custom CSS
+
+// # Contents
+// 1. Home Page
+// 1.1) Info Boxes Slider
+// 1.2) Home Slider
+// 1.3) Home Slide - 1
+// 1.4) Home Slide - 2
+// 1.5) Brands Slider
+// 1.6) Banners Section
+// 1.7) Shop Section
+// 1.8) Product Widgets Section
+// 2. Category Page
+// 3. Footer
+// 4. Responsive
+
+// 1. Global
+
+.breadcrumb-item + .breadcrumb-item:before {
+	font-family: inherit;
+	vertical-align: baseline;
+	margin-top: 0;
+}
+
+// 1.1) Info Boxes Slider
+.info-boxes-slider {
+	.info-box {
+		color: #fff;
+		line-height: 34px;
+		padding-top: .8rem;
+		padding-bottom: .8rem;
+	}
+
+	i {
+		margin-right: 1rem;
+	}
+
+	.owl-item:not(:first-child):not(:last-child) {
+		background-color: #b94725;
+	}
+}
+
+// 1.2) Home Slider
+.home-slider {
+	img {
+		min-height: 50rem;
+	}
+
+	.banner-layer {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+}
+
+// 1.3) Home Slide - 1
+.home-slide1 {
+	.banner-layer {
+		left: 8%;
+	}
+
+	img {
+		object-position: 70% top;
+	}
+
+	h2 {
+		font-size: 2.544em;
+		color: #777;
+		font-weight:500;
+	}
+
+	h3 {
+		font-size: 6.179em;
+		letter-spacing: .03em;
+
+		em {
+			display: inline-block;
+			font-style: normal;
+			font-size: .469em;
+			margin-right: .8rem;
+		}
+	}
+
+	h4 {
+		margin-right: 3.4em;
+		font-size: 1.125em;
+		font-weight: 700;
+
+		span {
+			font-size: 1.1111em;
+		}
+
+		em {
+			font-size: 2em;
+			font-style: normal;
+			margin-top: -2px;
+			display: inline-block;
+			letter-spacing: .01em;
+			vertical-align: text-top;
+		}
+	}
+
+	a {
+		border-width: 4px;
+		padding: 1em 3.7em;
+		background-color: transparent;
+		color: $primary-color-dark;
+		letter-spacing: .01em;
+	}
+}
+
+// 1.4) Home Slide - 2
+.home-slide2 {
+	.banner-layer {
+		right: 10.4%;
+	}
+
+	h2 {
+		color: #999;
+		font-size: 2.125em;
+		font-weight: 500;
+	}
+
+	h3 {
+		font-size: 4.3125em;
+	}
+
+	.off-category {
+		font-size: 2.125em;
+		letter-spacing: .15em;
+		margin-right: -1rem;
+	}
+
+	a {
+		padding: 1.25em 3em;
+		font-size: 1em;
+		letter-spacing: .15em;
+		font-weight: 600;
+	}
+}
+
+// 1.5) Brands Slider
+.brands-slider {
+	padding-top: 2.7rem;
+	padding-bottom: 2.8rem;
+}
+
+// 1.6) Banners Section
+.banners-section {
+	padding-top: 5.8rem;
+	padding-bottom: 3.9rem;
+
+	h3 {
+		font-size: 1.5em;
+	}
+
+	h4 {
+		font-size: 1em;
+	}
+
+	del {
+		font-size: 1.25em;
+		vertical-align: super;
+	}
+
+	strong {
+		font-size: 1.8125em;
+		font-weight: 800;
+		letter-spacing: -.04em;
+	}
+
+	.banner {
+		transition: box-shadow .3s;
+
+		&:hover {
+			box-shadow: 0 0 4rem rgba(0, 0, 0, .1);
+		}
+	}
+}
+
+.banner-layer-circle {
+	top: 50%;
+	left: 45%;
+	right: auto;
+	transform: translate(50%, -50%);
+
+	h4 {
+		font-size: 2.625em;
+	}
+}
+
+.banner-layer-vertical-item {
+	transform-origin: bottom left;
+	transform: rotate(270deg) translateY(100%);
+
+	.banner-layer-right & {
+		margin-left: 100%;
+		transform: rotate(270deg);
+		width: auto; // only for Firefox
+	}
+}
+
+.banner-layer-circle-item {
+	display: flex;
+	display: -ms-flexbox;
+	align-items:center;
+	-ms-flex-align: center;
+	justify-content: center;
+	-ms-flex-pack: center;
+	width: 2.238em;
+	height: 2.238em;
+	border-radius: 50%;
+	color: #fff;
+	background: $primary-color-dark;
+	letter-spacing: -.08em;
+
+	sup {
+		margin-left: .0866em;
+		line-height: 1;
+		top: 0;
+		letter-spacing: 0;
+		font-size: 55%;
+	}
+
+	small {
+		display: block;
+		font-size: .4329em;
+		letter-spacing: -.025em;
+	}
+}
+
+// 1.7) Shop Section
+
+.shop-section {
+	padding-top: 5rem;
+}
+
+.section-title {
+	padding-bottom: .7rem;
+	color: #302e2a;
+	border-bottom: 1px solid #e1e1e1;
+	font-size: 1.6rem;
+	letter-spacing: -.01em;
+	text-transform: uppercase;
+}
+
+.products-grid {
+	margin-left: -10px;
+	margin-right: -10px;
+
+	.product-default {
+		padding: 0 10px 20px;
+		margin-bottom: 0;
+	}
+
+	figure {
+		height: 100%;
+
+		img {
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+}
+
+.grid-height-1-2 {
+	height: 300px;
+}
+
+.grid-height-1 {
+	height: 600px;
+}
+
+.grid-col-sizer {
+	width: 25%;
+}
+
+// 1.8) Product Widgets Section
+.product-widgets-section {
+	padding: 5rem 0 2rem;
+
+	.product-widget {
+		margin-bottom: 2rem;
+
+		figure {
+			max-width: 95px;
+			min-width: 90px;
+			margin-right: 1.2rem;
+		}
+
+		.ratings-container {
+			margin-bottom: 1rem;
+		}
+
+		.product-title {
+			font-size: 1.5rem;
+		}
+
+		.product-price {
+			font-size: 1.8rem;
+		}
+
+		.old-price {
+			font-size: 1.4rem;
+		}
+	}
+}
+
+.section-sub-title {
+	font-size: 1.4rem;
+	letter-spacing: -.02em;
+	text-transform: uppercase;
+}
+
+.top-shoes-banner {
+	margin-top: 3.7rem;
+
+	h3 {
+		color: #fff;
+		font-size: 2em;
+	}
+
+	h4 {
+		font-size: 1.375em;
+		font-weight: 600;
+		letter-spacing: -.04em;
+	}
+
+	.btn {
+		padding: 1em 2.9em;
+		color: #fff;
+		border: 2px solid #fff;
+		font-size: .75em;
+
+		&:hover {
+			background-color: #fff;
+			color: $primary-color-dark;
+		}
+	}
+}
+
+// 1.9) Newsletter Section
+
+.newsletter-section {
+	.info-box i {
+		font-size: 3rem;
+		margin-bottom: 1.5rem;
+	}
+
+	h2 {
+		font-size: 2.4rem;
+		font-weight: 600;
+	}
+
+	p {
+		color: $body-text;
+		letter-spacing: .005em;
+	}
+}
+
+// 1. Newsletter Form
+.newsletter-form {
+    margin: 0;
+	padding-left: 2rem;
+	border-radius: 5rem;
+	background-color: #f4f4f4;
+
+// 2. Newsletter Form Input
+    .form-control {
+        border: 0;
+        margin: 0;
+        padding: 1rem 2rem 1rem 0;
+        color: #8d8d8d;
+        background-color: #f4f4f4;
+        font-size: 1.2rem;
+        font-style: italic;
+		height: 48px;
+		outline: none;
+		box-shadow: none;
+    
+        &::placeholder {
+            font: inherit;
+            color: #8d8d8d;
+            text-transform: none;
+        }
+    }
+
+// 3. Newsletter Form Button
+    .btn {
+        padding: 0 2.5em;
+        height: 48px;
+        border-radius: 0 5rem 5rem 0;
+        border: 0;
+        font-size: 1.2rem;
+        line-height: 48px;
+        letter-spacing: .005em;
+        box-shadow: none;
+    }
+}
+
+// 2. Category Page
+.main-content {
+	.product-default {
+		figure {
+			border: 1px solid #f4f4f4;
+		}
+
+		.product-title {
+			font-family: $second-font-family;
+		}
+	}
+}
+
+.toolbox-item label {
+	color: $body-text;
+	font-family: $font-family;
+	font-size: 1.2rem;
+	font-weight: 400;
+}
+
+.category-banner-container {
+	border-top: 1px solid #e7e7e7;
+	border-bottom: 1px solid #e7e7e7;
+}
+
+.category-banner {
+	background-repeat: no-repeat;
+	background-position: right bottom;
+	background-size: contain;
+	padding-top: 4.8rem;
+	padding-bottom: 4.8rem;
+	font-size: 1.339rem;
+
+	.btn {
+		font-size: 1.0757em;
+	}
+}
+
+// 3. Footer
+footer {
+	line-height: 24px;
+
+	.widget-title {
+		letter-spacing: 0;
+	}
+
+	h3 {
+		font-size: 2.2rem;
+	}
+}
+
+.footer-middle {
+	border-top: 1px solid #e7e7e7;
+}
+
+.footer-bottom {
+	border-top: 1px solid #e7e7e7;
+}
+
+// 4. Responsive
+
+@include mq(sm, max) {
+	.category-banner {
+		font-size: 2.3vw;
+	}
+
+	.grid-height-1-2 {
+		height: 200px;
+	}
+	
+	.grid-height-1 {
+		height: 400px;
+	}
+}
