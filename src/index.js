@@ -15,8 +15,8 @@ Amplify.configure({
     oauth: {
       domain: process.env.REACT_APP_COGNITO_USERPOOL_DOMAIN,
       scope: ["phone", "email", "profile", "openid"],
-      redirectSignIn: `${window.location.origin}/`,
-      redirectSignOut: `${window.location.origin}/`,
+      redirectSignIn: `'https://store.imoto.parts'/`,
+      redirectSignOut: `'https://store.imoto.parts'/`,
       responseType: "token",
     },
   },
