@@ -10,7 +10,7 @@ import {
  * @returns 
  */
 // export const getsSellerConfigurationData = async (sellerURL='www.localhost') => {
-export const getsSellerConfigurationData = async (sellerURL = 'www.localhost-2') => {
+export const getsSellerConfigurationData = async (sellerURL = 'www.localhost') => {
     try {
         const { data: sellerConfigurations } = await instanceAWSS3.get(
             `store-configs/${sellerURL}.json`
